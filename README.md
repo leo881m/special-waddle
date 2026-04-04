@@ -1,3 +1,4 @@
 # special-waddle
 
-olá *exclusivo para teste
+olá *exclusivo para teste e aprendizegem 
+
