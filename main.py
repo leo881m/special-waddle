@@ -1,5 +1,4 @@
-import fastapi
-from fastapi import FastAPI
+from fastapi import fastAPI
 import random
 app = fastapi.FastAPI()
 
