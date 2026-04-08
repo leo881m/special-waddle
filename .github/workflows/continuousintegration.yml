@@ -8,10 +8,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v5
-      - name: Phyton lint Code Scanning Acttion
-        uses: advanced-security/phyton-lint-code-scanning-action@v1
-        with:
-            linter: pyLint
+      - name: Python flake8 Lint
+        uses: py-actions/flake8@v2.3.0
       - run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}"
