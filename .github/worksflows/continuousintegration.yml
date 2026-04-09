@@ -1,21 +1,28 @@
-name: continuous integration
+name: Continuous Integrations
+
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
 on: [push]
+
 jobs:
-  Explore-GitHub-Actions:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v5
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+
+      - name: Python flake8 Lint
+        uses: py-actions/flake8@v2.3.0
+        with:
+          path: .
+
+      - name: Instalar dependências
         run: |
+          python -m pip install --upgrade pip
+          pip install pylint fastapi
+
+      - run: |
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
-      - { uses: ophub/amlogic-s9xxx-armbian@Armbian_resolute_arm64_server_2026.04, name: flake8 Lint, on: [ push, pull_request ], jobs: { flake8-lint: { runs-on: ubuntu-latest, name: Lint, steps: [ { name: Check out source repository, uses: actions/checkout@v3 }, { name: Set up Python environment, uses: actions/setup-python@v4, with: { python-version: "3.11" } }, { name: flake8 Lint, uses: py-actions/flake8@v2
-                            - name: Python flake8 Lint
-                            uses: py-actions/flake8@v2.3.0 } ] } } }
+
+      - run: echo "🍏 This job's status is ${{ job.status }}"
