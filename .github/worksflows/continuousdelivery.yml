@@ -1,35 +1,34 @@
 name: continuous delivery
 
 on:
-  pull_request:
+  push:
     branches:
-      - main 
+      - main
 
 jobs:
   delivery:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Similando Continuous Delivery
+      - name: Simulando Continuous Delivery
         uses: actions/upload-artifact@v4
         with:
           name: projetozipado.zip
           path: |
             main.py
             README.md
-            
-deploy:
+
+  deploy:
     needs: delivery
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixando artefato
         uses: actions/download-artifact@v4
         with:
-          name: projetozipado.zip 
+          name: projetozipado.zip
 
-      - name: Simulando Deploy
-          run: ls -R            
-
+      - name: Deploy
+        run: echo "Deploy realizado com sucesso 
+        
