@@ -1,0 +1,21 @@
+name: continuous delivery
+on:
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  delivery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Similando Continuous Delivery
+        uses: actions/upload-artifact@v4
+        with:
+          name: projetozipado.zip
+          path: |
+            main.py
+            README.md
+            
