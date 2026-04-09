@@ -10,6 +10,8 @@ jobs:
         uses: actions/checkout@v5
       - name: Python flake8 Lint
         uses: py-actions/flake8@v2.3.0
+        with:
+          linter: pylint
       - run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}"
