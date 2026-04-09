@@ -1,7 +1,7 @@
-from fastapi import fastAPI
+from fastapi import FastAPI
 import random
 
-app = fastapi.FastAPI()
+app = FastAPI()
 
 
 @app.get("/")
