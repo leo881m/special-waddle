@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 import random
 
 app = FastAPI()
@@ -6,7 +7,6 @@ app = FastAPI()
 @app.get("/")
 async def read_root() -> object:
     return {"Hello": "World"}
-
 
 @app.get("/teste")
 async def funcaoteste():
