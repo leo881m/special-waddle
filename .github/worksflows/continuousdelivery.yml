@@ -20,6 +20,7 @@ jobs:
             README.md
             
 deploy:
+<<<<<<< Updated upstream
     needs: delivery
     runs-on: ubuntu-latest
     steps:
@@ -29,3 +30,13 @@ deploy:
           name: projetozipado.zip 
       - name: Simulando Deploy
           run: ls -R            
+=======
+   runs-on: ubuntu-latest
+   needes: delivery           
+    steps:
+        uses: actions/download-artifact@v4
+        with:
+          name: projetozipado.zip
+        - name: Simulando Deploy
+          run: ls -R
+>>>>>>> Stashed changes
