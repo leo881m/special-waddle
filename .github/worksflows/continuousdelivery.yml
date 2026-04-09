@@ -1,4 +1,5 @@
 name: continuous delivery
+
 on:
   pull_request:
     branches:
@@ -22,11 +23,13 @@ jobs:
 deploy:
     needs: delivery
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixando artefato
         uses: actions/download-artifact@v4
         with:
           name: projetozipado.zip 
+
       - name: Simulando Deploy
           run: ls -R            
 
