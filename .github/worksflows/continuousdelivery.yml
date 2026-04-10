@@ -1,65 +1,36 @@
-name: continuous delivery
+name: Continuous Delivery
+
 on:
+  push:
   pull_request:
     branches:
-      - main 
+      - main
 
 jobs:
   delivery:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Similando Continuous Delivery
+      - name: Gerar artefato
         uses: actions/upload-artifact@v4
         with:
-          name: projetozipado.zip
+          name: projetozipado
           path: |
             main.py
             README.md
-            
-deploy:
+
+  deploy:
     needs: delivery
     runs-on: ubuntu-latest
+
     steps:
-    - name: Download Artifact from Azure Dev Ops
-      uses: manishsat/ado-download-artifact@v3
-      - name: Baixando artefato
+      - name: Baixar artefato
         uses: actions/download-artifact@v4
         with:
-          name: projetozipado.zip 
-      - name: Simulando Deploy
-          run: ls -R  
-    name: Github Workflow
-      - name: Download artifact
-    uses: aochmann/actions-download-artifact@1.0.4
+          name: projetozipado
 
-on: [push]
-
-- name: Download Artifact from Azure Dev Ops
-  uses: manishsat/ado-download-artifact@v3
-
-- name: Download Artifact from Azure Dev Ops
-  uses: manishsat/ado-download-artifact@v3S
-
-  - name: Download artifact
-  uses: aochmann/actions-download-artifact@1.0.0
-  with:
-    # Optional, GitHub token
-    github_token: ${{secrets.GITHUB_TOKEN}}
-
-    # Optional, uploaded artifact name,
-    # will download all artifacts if not specified
-    # and extract them in respective subdirectories
-    # https://github.com/actions/download-artifact#download-all-artifacts
-    name: artifact_name
-
-    # Optional, download latest artifact
-    latest: true
-
-    # Optional, directory where to extract artifact
-    path: extract_here
-
-    # Optional, defaults to current repo
-    repo: ${{github.repository}}
+      - name: Simular deploy
+        run: ls -R
