@@ -1,32 +1,44 @@
 name: continuous delivery
-on: 
-  push:
+on:
+  pull_request:
     branches:
-      - main
-    
+      - main 
+
 jobs:
   delivery:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout out repositorycode
+      - name: Checkout code
         uses: actions/checkout@v4
-        
-      - names: Simulando Continuous Delivery
+
+      - name: Similando Continuous Delivery
         uses: actions/upload-artifact@v4
         with:
           name: projetozipado.zip
           path: |
             main.py
             README.md
-
-  deploy:
-    runs-on: ubuntu-latest
+            
+deploy:
     needs: delivery
+    runs-on: ubuntu-latest
     steps:
-      -uses: actions/download-artifact@v4
-          name: projetozipado.zip
-      - name: Display structure od downloaded files
-        run: ls -la 
+    - name: Download Artifact from Azure Dev Ops
+      uses: manishsat/ado-download-artifact@v3
+      - name: Baixando artefato
+        uses: actions/download-artifact@v4
+        with:
           name: projetozipado.zip 
       - name: Simulando Deploy
-          run: ls -R            
+          run: ls -R  
+    name: Github Workflow
+      - name: Download artifact
+    uses: aochmann/actions-download-artifact@1.0.4
+
+on: [push]
+
+- name: Download Artifact from Azure Dev Ops
+  uses: manishsat/ado-download-artifact@v3
+
+- name: Download Artifact from Azure Dev Ops
+  uses: manishsat/ado-download-artifact@v3S
