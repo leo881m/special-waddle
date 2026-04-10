@@ -1,16 +1,15 @@
 name: continuous delivery
-on:
-criacao-continuous-deployment
+on: 
   push:
     branches:
-    - main
+      - main
     
 jobs:
   delivery:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout out repositorycode
+        uses: actions/checkout@v4
         
       - names: Simulando Continuous Delivery
         uses: actions/upload-artifact@v4
@@ -25,7 +24,9 @@ jobs:
     needs: delivery
     steps:
       -uses: actions/download-artifact@v4
-        with:
+          name: projetozipado.zip
+      - name: Display structure od downloaded files
+        run: ls -la 
           name: projetozipado.zip 
       - name: Simulando Deploy
           run: ls -R            
