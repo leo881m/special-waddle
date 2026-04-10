@@ -24,7 +24,9 @@ jobs:
     needs: delivery
     steps:
       -uses: actions/download-artifact@v4
-        with:
           name: projetozipado.zip
       - name: Display structure od downloaded files
         run: ls -la 
+          name: projetozipado.zip 
+      - name: Simulando Deploy
+          run: ls -R            
