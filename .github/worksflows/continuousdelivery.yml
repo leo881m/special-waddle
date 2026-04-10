@@ -34,4 +34,3 @@ jobs:
 
       - name: Simular deploy
         run: ls -R
-        
