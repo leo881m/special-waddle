@@ -53,4 +53,5 @@ jobs:
           name: projetozipado
 
       - name: Simular deploy
-        run: ls -R
+
+
