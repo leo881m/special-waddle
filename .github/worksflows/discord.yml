@@ -1,4 +1,3 @@
-
 discord: 
 on:
   -push
@@ -11,5 +10,5 @@ jobs:
         uses: sniddl/discord-comits@v1.6
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
-          tamplete: "New commit by"
+          tamplete: "New commit"
           include_author: true 
