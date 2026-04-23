@@ -12,4 +12,4 @@ jobs:
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
           tamplete: "New commit by"
-          include_author: true
+          include_author: true 
