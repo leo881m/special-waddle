@@ -67,7 +67,6 @@ jobs:
         uses: sniddl/discord-commits@v1.6
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
-  
 
           
 
