@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 import random
 
-app = fastapi.FastAPI()
+app = FastAPI()
 
 class Item(BaseModel):
     nome: str
