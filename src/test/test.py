@@ -1,43 +1,75 @@
-from src.main import *
+from fastapi.testclient import TestClient
+from src.main import app, Item, db
 from unittest.mock import patch
 
+client = TestClient(app)
+
+
+def setup_function():
+    # limpa o "banco" antes de cada teste
+    db.clear()
+
+
 def test_root():
-    assert test() == {"Hello": "World"}
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"Hello": "World"}
+
 
 def test_funcaoteste():
     with patch("random.randint", return_value=42):
-        result = funcaoteste()
-    assert result == {"teste": True, "numeroAleatorio": 42}
-    
-def test_read_root() -> object:
-    assert root() == {"Hello": "World"}
+        response = client.get("/teste")
 
-def test_funcaoteste():
-    with patch('random.randint', return_value=42):
-        assert funcaoteste() == {"teste": True, "numeroAleatorio": 42}
+    assert response.status_code == 200
+    assert response.json() == {"teste": True, "numeroAleatorio": 42}
+
 
 def test_create_item():
-    item_teste = Item(nome "Teste", preco=10.0)
-    assert create_item == create_item()
+    response = client.post(
+        "/items/1",
+        json={"nome": "Teste", "preco": 10.0}
+    )
 
-def test_update_item_negative():
-    assert item_teste == create_item()
+    assert response.status_code == 200
+    assert response.json()["item"]["nome"] == "Teste"
 
-def test_update_item_negativo():
-    assert not update_item(-5)
 
-def test_update_item_positivo():
-    assert update_item(10)
+def test_update_item_sucesso():
+    # cria primeiro
+    client.post("/items/1", json={"nome": "Antigo", "preco": 5.0})
 
-def teste_delete_item_negativo():
-    assert not delete_item(-5)
+    # atualiza
+    response = client.put(
+        "/items/1",
+        json={"nome": "Novo", "preco": 15.0}
+    )
 
-def teste_delete_item_positivo():
-    assert delete_item(10)
-    
-def test_delete_item_negativo():
-    assert not delete_item(-5)  
+    assert response.status_code == 200
+    assert response.json()["item"]["nome"] == "Novo"
 
-def test_delete_item_positivo():
-    assert delete_item(10)
+
+def test_update_item_nao_existe():
+    response = client.put(
+        "/items/999",
+        json={"nome": "Teste", "preco": 1.0}
+    )
+
+    assert response.status_code == 200
+    assert response.json()["erro"] == "Item não encontrado"
+
+
+def test_delete_item_sucesso():
+    client.post("/items/1", json={"nome": "Delete", "preco": 20.0})
+
+    response = client.delete("/items/1")
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "Item deletado"
+
+
+def test_delete_item_nao_existe():
+    response = client.delete("/items/999")
+
+    assert response.status_code == 200
+    assert response.json()["erro"] == "Item não encontrado"
     
