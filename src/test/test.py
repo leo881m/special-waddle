@@ -8,7 +8,7 @@ def test_funcaoteste():
     with patch("random.randint", return_value=42):
         result = funcaoteste()
     assert result == {"teste": True, "numeroAleatorio": 42}
-
+    
 def test_read_root() -> object:
     assert root() == {"Hello": "World"}
 
@@ -16,9 +16,8 @@ def test_funcaoteste():
     with patch('random.randint', return_value=42):
         assert funcaoteste() == {"teste": True, "numeroAleatorio": 42}
 
-
 def test_create_item():
-    item_teste = Item(nome="Teste", preco=10.0)
+    item_teste = Item(name="Teste", preco=10.0)
     assert create_item == create_item()
 
 def test_update_item_negative():
