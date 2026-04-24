@@ -33,10 +33,7 @@ jobs:
           name: projetozipado
 
       - name: Simular deploy
-
         run: ls -R
-
-        name: ci
 
   docker:
     runs-on: ubuntu-latest
