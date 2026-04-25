@@ -18,7 +18,7 @@ jobs:
         with:
           name: projetozipado
           path: |
-            ** .py
+            **.py
             README.md
 
   docker:
