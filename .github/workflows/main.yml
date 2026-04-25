@@ -1,61 +1,68 @@
-name: CI/CD Pipeline
+Nome : Entrega Contínua
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
+sobre :
+  empurrar :
+    galhos :
+      - principal
 
-jobs:
-  pipeline:
-    runs-on: ubuntu-latest
+empregos :
+  entrega :
+    runs-on : ubuntu-latest
 
-    env:
-      PYTHONPATH: .
+    passos :
+      - nome : Finalizar compra do código
+        utiliza : actions/checkout@v4
 
-    steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - nome : Gerar artefato
+        utiliza : actions/upload-artifact@v4
+        com :
+          nome : projetozipado
+          caminho : |
+            main.py
+            README.md
+  docker :
+    runs-on : ubuntu-latest
+    necessidades : entrega
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
+    passos :
+      - nome : Finalizar compra
+        utiliza : actions/checkout@v4
 
-      - name: Instalar dependências
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+      - nome : Configurar QEMU
+        usa : docker/setup-qemu-action@v3
 
-      - name: Rodar testes
-        run: |
-          pytest --maxfail=1 --disable-warnings -q
+      - nome : Configurar Docker Buildx
+        usa : docker/setup-buildx-action@v3
 
-      - name: Coverage
-        run: |
-          pytest --cov=src --cov-report=term-missing
+      - nome : Criar imagem Docker
+        usa : docker/build-push-action@v6
+        com :
+          contexto : .
+          empurrar : falso
+          tags : minha-api:latest
 
-      - name: Gerar artefato
-        uses: actions/upload-artifact@v4
-        with:
-          name: projeto
-          path: .
+  implantar :
+    runs-on : ubuntu-latest
+    Requisitos : Docker
 
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v4
+    passos :
+      - nome : Baixar artefato
+        utiliza : actions/download-artifact@v4
+        com :
+          nome : projetozipado
 
-      - name: Setup Buildx
-        uses: docker/setup-buildx-action@v4
+      - nome : Implantação simulada
+        executar : ls -R
 
-      - name: Login Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - nome : Implantação simulada
+        run : echo "deploy realizado com sucesso"
+        
+  discord :
+    runs-on : ubuntu-latest
+    necessidades : implantar
 
-      - name: Build e push da imagem
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/app:latest
-              
+    passos :
+      - nome : Notificar no Discord
+        usa : sniddl/discord-commits@v1.6
+        com :
+          webhook : ${{ secrets.DISCORD_WEBHOOK }}
