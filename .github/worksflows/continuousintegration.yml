@@ -26,3 +26,8 @@ jobs:
           ls ${{ github.workspace }}
 
       - run: echo "🍏 This job's status is ${{ job.status }}"
+      - name: Run tests with pytest
+        run: |
+          pip install pytest pytest-asyncio
+          pytest test/test.py
+          
