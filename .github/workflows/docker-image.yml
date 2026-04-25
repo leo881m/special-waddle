@@ -36,8 +36,6 @@ jobs:
 
         run: ls -R
 
-        name: ci
-
   docker:
     runs-on: ubuntu-latest
     steps:
