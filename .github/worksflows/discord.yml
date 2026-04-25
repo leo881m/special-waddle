@@ -1,0 +1,21 @@
+name: Discord Notification
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  discord:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enviar mensagem para Discord
+        uses: sniddl/discord-commits@v1.6
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          template: "🚀 Novo commit enviado!"
+          include_author: true
+          

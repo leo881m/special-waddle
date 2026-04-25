@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 import random
 
-app = fastapi.FastAPI()
+app = FastAPI()
 
 class Item(BaseModel):
     nome: str
@@ -15,7 +15,7 @@ async def read_root() -> object:
 
 @app.get("/teste")
 async def funcaoteste():
-    return {"teste": True, "numeroAleatorio": random.randint(0,1000)}
+    return {"teste": True, "numeroAleatorio": random.randint(1,2000)}
 
 @app.post("/items/{item_id}")
 def create_item(item_id: int, item: Item):
