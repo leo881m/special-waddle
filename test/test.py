@@ -1,50 +1,57 @@
-from src.main import *
+from fastapi.testclient import TestClient
+from src.main import app, db
 from unittest.mock import patch
 
-import pytest
-import pytest_asyncio
+client = TestClient(app)
 
 
-@pytest.mark.asyncio
-async def test_root():
-    result = await root()
-    assert result == {"mensagem": "Hello", "mundo": "World"}
+def setup_function():
+    db.clear()
 
 
-@pytest.mark.asyncio
-async def test_funcaoteste():
-    with patch("random.randint", return_value=42):
-        result = await funcaoteste()
-        assert result == {"teste": True, "numeroAleatorio": 42}
+def test_root():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"Hello": "World"}
 
 
-@pytest.mark.asyncio
-async def test_create_item():
-    item_teste = Item(name="Teste", preco=10.0)
-    result = await create_item(item_teste)
-    assert result.name == "Teste"
-    assert result.preco == 10.0
+def test_funcaoteste():
+    with patch("src.main.random.randint", return_value=42):
+        response = client.get("/teste")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "teste": True,
+        "numeroAleatorio": 42
+    }
 
 
-@pytest.mark.asyncio
-async def test_update_item_negativo():
-    result = await update_item(-5)
-    assert not result
+def test_create_item():
+    response = client.post(
+        "/items/1",
+        json={"nome": "Teste", "preco": 10.0}
+    )
+
+    assert response.status_code == 200
+    assert response.json()["item"]["nome"] == "Teste"
 
 
-@pytest.mark.asyncio
-async def test_update_item_positivo():
-    result = await update_item(10)
-    assert result
+def test_update_item():
+    client.post("/items/1", json={"nome": "Antigo", "preco": 5.0})
+
+    response = client.put(
+        "/items/1",
+        json={"nome": "Novo", "preco": 15.0}
+    )
+
+    assert response.status_code == 200
+    assert response.json()["item"]["nome"] == "Novo"
 
 
-@pytest.mark.asyncio
-async def test_delete_item_negativo():
-    result = await delete_item(-5)
-    assert not result
+def test_delete_item():
+    client.post("/items/1", json={"nome": "Teste", "preco": 10.0})
 
+    response = client.delete("/items/1")
 
-@pytest.mark.asyncio
-async def test_delete_item_positivo():
-    result = await delete_item(10)
-    assert result
+    assert response.status_code == 200
+    assert response.json()["message"] == "Item deletado"
