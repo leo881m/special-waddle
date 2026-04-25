@@ -1,63 +1,63 @@
-name: Continuous Delivery
-
 on:
   push:
-    branches: [ "main" ]
   pull_request:
+    branches:
+      - main
 
 jobs:
   delivery:
     runs-on: ubuntu-latest
 
     steps:
-      - name:  Checkout do código
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name:  Gerar artefato
+      - name: Gerar artefato
         uses: actions/upload-artifact@v4
         with:
           name: projetozipado
           path: |
+            main.py
             README.md
-            src/
 
   deploy:
     needs: delivery
     runs-on: ubuntu-latest
 
     steps:
-      - name:  Baixar artefato
+      - name: Baixar artefato
         uses: actions/download-artifact@v4
         with:
           name: projetozipado
 
-      - name:  Simular deploy
+      - name: Simular deploy
+
         run: ls -R
 
-  buildx:
-    needs: delivery
+  docker:
     runs-on: ubuntu-latest
-
     steps:
-      - name:  Checkout
-        uses: actions/checkout@v4
-
-      - name:  Setup QEMU
+      -
+        # Add support for more platforms with QEMU (optional)
+        # https://github.com/docker/setup-qemu-action
+        name: Set up QEMU
         uses: docker/setup-qemu-action@v4
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v47
 
-      - name:  Setup Buildx
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+      -
+        name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
-
-      - name:  Login Docker Hub
-        uses: docker/login-action@v4
+      -
+        name: Build and push
+        uses: docker/build-push-action@v7
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          push: True
+          tags: user/app:latest
 
-      - name:  Build e Push da imagem
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/app:latest
+
 
