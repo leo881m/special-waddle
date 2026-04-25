@@ -61,4 +61,3 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/app:latest
 
-
