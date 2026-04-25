@@ -1,51 +1,33 @@
-name: Continuous Integration
+name: Continuous Integrations
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on: [push]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
-    env:
-      PYTHONPATH: .
-
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - name: Check out repository code
+        uses: actions/checkout@v5
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Python flake8 Lint
+        uses: py-actions/flake8@v2.3.0
         with:
-          python-version: "3.12"
+          path: .
 
       - name: Instalar dependências
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install pylint fastapi
 
-      - name: Rodar testes com pytest
+      - run: |
+          ls ${{ github.workspace }}
+
+      - run: echo "🍏 This job's status is ${{ job.status }}"
+      - name: Run tests with pytest
         run: |
-          python -m pytest --maxfail=1 --disable-warnings -q
-
-      - name: Coverage
-        run: |
-          python -m pytest --cov=src --cov-report=term-missing
-
-      - name: Notificar sucesso no Discord
-        if: success()
-        uses: sniddl/discord-commits@v1.6
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
-          template: "CI passou com sucesso!"
-          include_author: true
-
-      - name: Notificar erro no Discord
-        if: failure()
-        uses: sniddl/discord-commits@v1.6
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
-          template: " CI falhou!"
-          include_author: true
+          pip install pytest pytest-asyncio
+          pytest test/test.py
+          
