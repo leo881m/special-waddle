@@ -13,13 +13,14 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
+      - name: Ver arquivos (debug)
+        run: ls -R
+
       - name: Gerar artefato
         uses: actions/upload-artifact@v4
         with:
           name: projetozipado
-          path: |
-            README.md
-            src/
+          path: .
 
   deploy:
     needs: delivery
@@ -31,8 +32,11 @@ jobs:
         with:
           name: projetozipado
 
-      - name: Simular deploy
+      - name: Ver arquivos após download
         run: ls -R
+
+      - name: Simular deploy
+        run: echo "Deploy simulado com sucesso"
 
   buildx:
     needs: deploy
@@ -41,6 +45,9 @@ jobs:
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
+
+      - name: Ver arquivos antes do build
+        run: ls -R
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v4
@@ -60,4 +67,3 @@ jobs:
           context: .
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/app:latest
-
