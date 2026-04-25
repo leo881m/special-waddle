@@ -35,10 +35,15 @@ jobs:
       - name: Simular deploy
 
         run: ls -R
+<<<<<<< Updated upstream
 
         name: ci
 
   buildx:
+=======
+        
+  discord:
+>>>>>>> Stashed changes
     runs-on: ubuntu-latest
     steps:
       -
