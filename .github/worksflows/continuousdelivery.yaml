@@ -18,7 +18,7 @@ jobs:
         with:
           name: projetozipado
           path: |
-            **.py
+            ** .py
             README.md
 
   docker:
@@ -53,31 +53,3 @@ jobs:
           name: projetozipado
 
       - name: Simular deploy
-        run: ls -R
-
-      - name: Simular deploy
-        run: echo "deploy realizado com sucesso"
-
-  discord:
-    runs-on: ubuntu-latest
-    needs: deploy
-
-    steps:
-      - name: Notificar no Discord
-        uses: sniddl/discord-commits@v1.6
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-      -
-        name: Build and push
-        uses: docker/build-push-action@v7
-        with:
-          push: true
-          tags: user/app:latest
-
