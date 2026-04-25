@@ -15,7 +15,7 @@ async def read_root() -> object:
 
 @app.get("/teste")
 async def funcaoteste():
-    return {"teste": True, "numeroAleatorio": random.randint(0,2000)}
+    return {"teste": True, "numeroAleatorio": random.randint(1,2000)}
 
 @app.post("/items/{item_id}")
 def create_item(item_id: int, item: Item):
