@@ -35,7 +35,7 @@ jobs:
         run: ls -R
 
   buildx:
-    needs: delivery
+    needs: deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -51,8 +51,8 @@ jobs:
       - name: Login no Docker Hub
         uses: docker/login-action@v4
         with:
-         username: ${{ vars.DOCKERHUB_USERNAME }}
-         password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build e push da imagem
         uses: docker/build-push-action@v5
