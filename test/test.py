@@ -1,43 +1,57 @@
 from src.main import *
 from unittest.mock import patch
 
-def test_root():
-    assert test() == {"Hello": "World"}
+import pytest
+import pytest_asyncio
 
-def test_funcaoteste():
+
+@pytest.mark.asyncio
+async def test_root():
+    result =  await root()
+    yield result
+    assert result == {"mensagem": "Hello", "mundo": "World"}
+
+@pytest.mark.asyncio
+async def test_funcaoteste():
     with patch("random.randint", return_value=42):
-        result = funcaoteste()
+        result = await funcaoteste()
+        yield result
+
     assert result == {"teste": True, "numeroAleatorio": 42}
-    
-def test_read_root() -> object:
-    assert root() == {"Hello": "World"}
 
-def test_funcaoteste():
-    with patch('random.randint', return_value=42):
-        assert funcaoteste() == {"teste": True, "numeroAleatorio": 42}
-
-def test_create_item():
+@pytest.mark.asyncio
+async def test_create_item():
     item_teste = Item(name="Teste", preco=10.0)
-    assert create_item == create_item()
+    result = await create_item(item_teste)
+    assert create_item == result
 
-def test_update_item_negative():
-    assert item_teste == create_item()
+@pytest.mark.asyncio
+async def test_update_item_negativo():
+    result = await update_item(-5)   
+    assert not result
 
-def test_update_item_negativo():
-    assert not update_item(-5)
+@pytest.mark.asyncio
+async def test_update_item_positivo():
+    result = await update_item(10)
+    assert result   
 
-def test_update_item_positivo():
-    assert update_item(10)
+@pytest.mark.asyncio
+async def teste_delete_item_negativo():
+    result = await delete_item(-5)
+    assert not result
 
-def teste_delete_item_negativo():
-    assert not delete_item(-5)
+@pytest.mark.asyncio
+async def teste_delete_item_positivo():
+    result = await delete_item(10)
+    assert result
 
-def teste_delete_item_positivo():
-    assert delete_item(10)
-    
-def test_delete_item_negativo():
-    assert not delete_item(-5)  
+@pytest.mark.asyncio   
+async def test_delete_item_negativo():
+    result = await delete_item(-5)
+    assert not result
 
-def test_delete_item_positivo():
-    assert delete_item(10)
+@pytest.mark.asyncio
+async def test_delete_item_positivo():
+    result = await delete_item(10)
+    assert result
     
